@@ -4,7 +4,7 @@
 import * as React from 'react'
 
 function Greeting({initialName = ''}) {
-  const [name, setName] = React.useState( window.localStorage.getItem('name') ?? initialName)
+  const [name, setName] = React.useState(() => initialNameFromLocalStorage())
 
   React.useEffect(() => {
     window.localStorage.setItem('name', name)
@@ -13,6 +13,12 @@ function Greeting({initialName = ''}) {
   function handleChange(event) {
     setName(event.target.value)
   }
+
+  function initialNameFromLocalStorage() {
+    const name = window.localStorage.getItem('name')
+    return name ?? initialName
+  }
+
   return (
     <div>
       <form>
