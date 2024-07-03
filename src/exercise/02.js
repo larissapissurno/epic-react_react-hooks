@@ -7,12 +7,12 @@ function useLocalStorageState(localStorageKey, initialValue = '') {
   const [state, setState] = React.useState(() => initialNameFromLocalStorage())
 
   React.useEffect(() => {
-    window.localStorage.setItem(localStorageKey, state)
+    window.localStorage.setItem(localStorageKey, JSON.stringify(state))
   }, [state])
 
   function initialNameFromLocalStorage() {
     const name = window.localStorage.getItem(localStorageKey)
-    return name ?? initialValue
+    return name ? JSON.parse(name) : initialValue
   }
 
   return [state, setState];
