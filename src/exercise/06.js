@@ -5,7 +5,7 @@ import * as React from 'react'
 import { fetchPokemon, PokemonInfoFallback, PokemonDataView } from '../pokemon'
 import {PokemonForm} from '../pokemon'
 
-function PokemonInfo({pokemonName}) {
+function PokemonInfo({pokemonName, onError}) {
   const [pokemon, setPokemon] = React.useState(null)
 
   React.useEffect(() => {
@@ -13,7 +13,9 @@ function PokemonInfo({pokemonName}) {
 
     setPokemon(null);
 
-    fetchPokemon(pokemonName).then(setPokemon)
+    fetchPokemon(pokemonName)
+      .then(setPokemon)
+      .catch(onError)
   }, [pokemonName])
 
   if (!pokemonName) return 'Submit a pokemon';
@@ -25,6 +27,7 @@ function PokemonInfo({pokemonName}) {
 
 function App() {
   const [pokemonName, setPokemonName] = React.useState('')
+  const [error, setError] = React.useState(null)
 
   function handleSubmit(newPokemonName) {
     setPokemonName(newPokemonName)
@@ -35,8 +38,14 @@ function App() {
       <PokemonForm pokemonName={pokemonName} onSubmit={handleSubmit} />
       <hr />
       <div className="pokemon-info">
-        <PokemonInfo pokemonName={pokemonName} />
+        <PokemonInfo pokemonName={pokemonName} onError={setError}/>
       </div>
+      <br/>
+      {error && (
+        <div role="alert">
+          There was an error: <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
+        </div>
+      )}
     </div>
   )
 }
