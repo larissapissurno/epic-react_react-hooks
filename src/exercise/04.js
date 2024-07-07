@@ -5,8 +5,23 @@ import * as React from 'react'
 
 const initialSquares = Array(9).fill(null)
 
+function useLocalStorageState(localStorageKey, initialValue = '') {
+  const [state, setState] = React.useState(() => initialNameFromLocalStorage())
+
+  React.useEffect(() => {
+    window.localStorage.setItem(localStorageKey, JSON.stringify(state))
+  }, [state])
+
+  function initialNameFromLocalStorage() {
+    const name = window.localStorage.getItem(localStorageKey)
+    return name ? JSON.parse(name) : initialValue
+  }
+
+  return [state, setState];
+}
+
 function Board() {
-  const [squares, setSquares] = React.useState(initialSquares);
+  const [squares, setSquares] = useLocalStorageState('squares', initialSquares);
 
   const nextValue = calculateNextValue(squares)
   const winner = calculateWinner(squares)
@@ -18,7 +33,7 @@ function Board() {
     const squaresCopy = [...squares];
   
     squaresCopy[square] = nextValue;
-    
+
     setSquares(squaresCopy);
   }
 
