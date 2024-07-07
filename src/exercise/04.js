@@ -8,9 +8,6 @@ const initialSquares = Array(9).fill(null)
 
 
 function Board({onSelectSquare, squares}) {
-
-
-
   function renderSquare(i) {
     return (
       <button className="square" onClick={() => onSelectSquare(i)}>
@@ -50,10 +47,11 @@ function Game() {
   const status = calculateStatus(winner, squares, nextValue)
 
   const moves = history.map((stepSquares, step) => {
-    const isDisabled = step === currentStep;
+    const isCurrentStep = step === currentStep;
+    const currentFlag = isCurrentStep ? ' (current)' : '';
     return (<li key={step}>
-      <button onClick={() => handleGoToStep(step)} disabled={isDisabled}>
-        {step === 0 ? 'Go to game start' : `Go to move #${step}`}
+      <button onClick={() => handleGoToStep(step)} disabled={isCurrentStep}>
+        {step === 0 ? 'Go to game start' : `Go to move #${step} ${currentFlag}`}
       </button>
     </li>)
   })
