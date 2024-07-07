@@ -34,7 +34,11 @@ import { ErrorBoundary } from "react-error-boundary";
 // }
 
 function PokemonInfo({pokemonName}) {
-  const [state, setState] = React.useState({pokemon: null, status: 'idle', error: null})
+  const [state, setState] = React.useState({
+    pokemon: null,
+    status: pokemonName ? 'pending' : 'idle',
+    error: null
+  })
 
   React.useEffect(() => {
     if (!pokemonName) return;
